@@ -7,7 +7,6 @@ class DsNhanVien extends controller
         $this->dsnv = $this->model('NhanVien_m');
     }
 
-
     function Get_data()
     {
         $dulieu = $this->dsnv->loadNhanVien();
@@ -30,7 +29,8 @@ class DsNhanVien extends controller
                 'page' => 'DsNhanVien_v',
                 'dulieu' => $dulieu,
                 'maNv' => $mnv,
-                'tenNv' => $tnv
+                'tenNv' => $tnv,
+                'matoa' => $this->dsnv->getMaToa()
             ]);
         }
 
@@ -129,7 +129,8 @@ class DsNhanVien extends controller
             $dulieu = $this->dsnv->loadNhanVien();
             $this->view('Masterlayout', [
                 'page' => 'DsNhanVien_v',
-                'dulieu' => $dulieu
+                'dulieu' => $dulieu,
+                'matoa' => $this->dsnv->getMaToa()
             ]);
         }
     }
@@ -165,6 +166,7 @@ class DsNhanVien extends controller
         $this->view('MasterLayout', [
             'page' => 'DsNhanVien_v',
             'dulieu' => $dulieu,
+            'matoa' => $this->dsnv->getMaToa()
         ]);
     }
 
@@ -181,7 +183,8 @@ class DsNhanVien extends controller
         $dulieu = $this->dsnv->searchNhanVien('', '');
         $this->view('Masterlayout', [
             'page' => 'DsNhanVien_v',
-            'dulieu' => $dulieu
+            'dulieu' => $dulieu,
+            'matoa' => $this->dsnv->getMaToa()
         ]);
     }
 
@@ -198,7 +201,6 @@ class DsNhanVien extends controller
     //Function cập nhật thông tin nhân viên
     function Update()
     {
-
         if (isset($_POST['btnCapNhat'])) {
             $mnv = $_POST['txtMaNv'];
             $tnv = $_POST['txtTenNv'];
@@ -219,16 +221,17 @@ class DsNhanVien extends controller
             $dulieu = $this->dsnv->searchNhanVien('', '');
             $this->view('Masterlayout', [
                 'page' => 'DsNhanVien_v',
-                'dulieu' => $dulieu
+                'dulieu' => $dulieu,
+                'matoa' => $this->dsnv->getMaToa()
             ]);
         }
         if (isset($_POST['btnBack'])) {
             $dulieu = $this->dsnv->searchNhanVien('', '');
             $this->view('Masterlayout', [
                 'page' => 'DsNhanVien_v',
-                'dulieu' => $dulieu
+                'dulieu' => $dulieu,
+                'matoa' => $this->dsnv->getMaToa()
             ]);
         }
-       
     }
 }
