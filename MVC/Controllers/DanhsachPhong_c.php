@@ -7,6 +7,45 @@ class DanhsachPhong_c extends controller
         $this->ds = $this->model('Phong_m');
     }
 
+    function error()
+    {
+        $this->view('Masterlayout', [
+            'ma' => $this->ds->toa_All(),
+            'ma1' => $this->ds->toa_All()
+        ]);
+        $update = $this->ds->update_ctphong();
+        $dulieu = $this->ds->all();
+        $ma = $this->ds->toa_All();
+        $ma1 = $this->ds->toa_All();
+        $this->view('Masterlayout', [
+            'page' => 'DanhsachPhong_v',
+            'update' => $update,
+            'dulieu' => $dulieu,
+            'ma' => $ma, // Lấy tất cả dữ liệu từ bảng lớp học, nếu bài bạn là phòng thì đây là tòa
+            'ma1' => $ma1
+        ]);
+        if (isset($_POST['btnTimkiem'])) {
+            $maphong = $_POST['txtTimkiem'];
+            $matoa = $_POST['txtTimkiem'];
+            $trangthai = isset($_POST['txtTimkiem2']) ? $_POST['txtTimkiem2'] : "";
+            // $tienphong=$_POST['txtTimkiem'];
+            $dulieu = $this->ds->find_radio($maphong, $matoa, $trangthai);
+            $ma = $this->ds->toa_All();
+            $ma1 = $this->ds->toa_All();
+            //Gọi lại giao diện và truyền $dulieu ra
+            $this->view('Masterlayout', [
+                'page' => 'DanhsachPhong_v',
+                'dulieu' => $dulieu,
+                'maphong' => $maphong,
+                'matoa' => $matoa,
+                'trangthai' => $trangthai,
+                'ma' => $ma,
+                'ma1' => $ma1,
+
+            ]);
+        }
+    }
+
     function Get_data()
     {
         $update = $this->ds->update_ctphong();
@@ -17,11 +56,12 @@ class DanhsachPhong_c extends controller
             'page' => 'DanhsachPhong_v',
             'update' => $update,
             'dulieu' => $dulieu,
-            'ma' => $ma,// Lấy tất cả dữ liệu từ bảng lớp học, nếu bài bạn là phòng thì đây là tòa
+            'ma' => $ma, // Lấy tất cả dữ liệu từ bảng lớp học, nếu bài bạn là phòng thì đây là tòa
             'ma1' => $ma1
         ]);
     }
-    
+
+
     function timkiem()
     {
         if (isset($_POST['btnTimkiem'])) {
@@ -45,51 +85,51 @@ class DanhsachPhong_c extends controller
             ]);
         }
         //xuất excel//
-        if(isset($_POST['btnXuat'])){
+        if (isset($_POST['btnXuat'])) {
             $objExcel = new PHPExcel();
             $objExcel->setActiveSheetIndex(0);
             $sheet = $objExcel->getActiveSheet()->setTitle('Danh sách');
             $rowCount = 1;
-        
+
             // Tạo tiêu đề cho cột trong Excel
-            $sheet->setCellValue('A'.$rowCount, 'STT');
-            $sheet->setCellValue('B'.$rowCount, 'Mã phòng');
-            $sheet->setCellValue('C'.$rowCount, 'Mã tòa');
-            $sheet->setCellValue('D'.$rowCount, 'Số người');
-            $sheet->setCellValue('E'.$rowCount, 'Tiền phòng');
-            $sheet->setCellValue('F'.$rowCount, 'Trạng thái');
+            $sheet->setCellValue('A' . $rowCount, 'STT');
+            $sheet->setCellValue('B' . $rowCount, 'Mã phòng');
+            $sheet->setCellValue('C' . $rowCount, 'Mã tòa');
+            $sheet->setCellValue('D' . $rowCount, 'Số người');
+            $sheet->setCellValue('E' . $rowCount, 'Tiền phòng');
+            $sheet->setCellValue('F' . $rowCount, 'Trạng thái');
             // Định dạng cột tiêu đề
             $sheet->getColumnDimension('A')->setAutoSize(true);
             $sheet->getColumnDimension('B')->setAutoSize(true);
             $sheet->getColumnDimension('C')->setAutoSize(true);
-        
+
             // Gán màu nền
             $sheet->getStyle('A1:F1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('00FF00');
             // Căn giữa
             $sheet->getStyle('A1:F1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        
+
             // Điền dữ liệu vào các dòng. Dữ liệu lấy từ DB
             $maphong = $_POST['txtTimkiem'];
             $matoa = $_POST['txtTimkiem'];
             $trangthai = $_POST['txtTimkiem'];
             $dulieu = $this->ds->find($maphong, $matoa, $trangthai);
-        
+
             if ($dulieu && mysqli_num_rows($dulieu) > 0) {
                 while ($row = mysqli_fetch_array($dulieu)) {
                     $rowCount++;
-                    $sheet->setCellValue('A'.$rowCount, $rowCount - 1); // sửa lại giá trị của STT cho đúng
-                    $sheet->setCellValue('B'.$rowCount, $row['maPhong']);
-                    $sheet->setCellValue('C'.$rowCount, $row['maToa']);
-                    $sheet->setCellValue('D'.$rowCount, $row['soNguoi']);
-                    $sheet->setCellValue('E'.$rowCount, $row['tienPhong']);
-                    $sheet->setCellValue('F'.$rowCount, $row['trangThai']);
+                    $sheet->setCellValue('A' . $rowCount, $rowCount - 1); // sửa lại giá trị của STT cho đúng
+                    $sheet->setCellValue('B' . $rowCount, $row['maPhong']);
+                    $sheet->setCellValue('C' . $rowCount, $row['maToa']);
+                    $sheet->setCellValue('D' . $rowCount, $row['soNguoi']);
+                    $sheet->setCellValue('E' . $rowCount, $row['tienPhong']);
+                    $sheet->setCellValue('F' . $rowCount, $row['trangThai']);
                 }
             } else {
                 // Handle the case where no data is found
                 echo "<script>alert('Không có dữ liệu để xuất');</script>";
                 return;
             }
-        
+
             // Kẻ bảng 
             $styleArray = array(
                 'borders' => array(
@@ -99,11 +139,11 @@ class DanhsachPhong_c extends controller
                 )
             );
             $sheet->getStyle('A1:' . 'F' . ($rowCount))->applyFromArray($styleArray);
-        
+
             $objWriter = new PHPExcel_Writer_Excel2007($objExcel);
             $fileName = 'Danh sách.xlsx';
             $objWriter->save($fileName);
-        
+
             header('Content-Disposition: attachment; filename="' . $fileName . '"');
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Length: ' . filesize($fileName));
@@ -143,14 +183,14 @@ class DanhsachPhong_c extends controller
                         }
 
                         // Kiểm tra trùng mã 
-                        $kq1 = $this->ds->checktrungma2($maphong,$matoa);
+                        $kq1 = $this->ds->checktrungma2($maphong, $matoa);
                         if ($kq1) {
                             echo "<script>alert('Mã phòng ở hàng {$i} đã tồn tại!')</script>";
                             $importSuccess = false;
                             continue;
                         } else {
                             // Gọi hàm thêm dữ liệu insert trong model
-                            $kq = $this->ds->insert($maphong,$matoa,$songuoi,$tienphong,$trangthai);
+                            $kq = $this->ds->insert($maphong, $matoa, $songuoi, $tienphong, $trangthai);
                             if (!$kq) {
                                 echo "<script>alert('Import thất bại ở hàng {$i}!')</script>";
                                 $importSuccess = false;
@@ -164,7 +204,7 @@ class DanhsachPhong_c extends controller
                         echo "<script>alert('Có lỗi xảy ra khi import! Vui lòng kiểm tra lại.')</script>";
                     }
                 } catch (Exception $e) {
-                    echo "<script>alert('Có lỗi xảy ra khi xử lý file: ".$e->getMessage()."')</script>";
+                    echo "<script>alert('Có lỗi xảy ra khi xử lý file: " . $e->getMessage() . "')</script>";
                 }
             }
         }
@@ -275,8 +315,4 @@ class DanhsachPhong_c extends controller
             'dulieu' => $dulieu,
         ]);
     }
-    
-
-    
 }
-?>
