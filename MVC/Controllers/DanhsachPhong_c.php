@@ -24,6 +24,26 @@ class DanhsachPhong_c extends controller
             'ma' => $ma, // Lấy tất cả dữ liệu từ bảng lớp học, nếu bài bạn là phòng thì đây là tòa
             'ma1' => $ma1
         ]);
+        if (isset($_POST['btnTimkiem'])) {
+            $maphong = $_POST['txtTimkiem'];
+            $matoa = $_POST['txtTimkiem'];
+            $trangthai = isset($_POST['txtTimkiem2']) ? $_POST['txtTimkiem2'] : "";
+            // $tienphong=$_POST['txtTimkiem'];
+            $dulieu = $this->ds->find_radio($maphong, $matoa, $trangthai);
+            $ma = $this->ds->toa_All();
+            $ma1 = $this->ds->toa_All();
+            //Gọi lại giao diện và truyền $dulieu ra
+            $this->view('Masterlayout', [
+                'page' => 'DanhsachPhong_v',
+                'dulieu' => $dulieu,
+                'maphong' => $maphong,
+                'matoa' => $matoa,
+                'trangthai' => $trangthai,
+                'ma' => $ma,
+                'ma1' => $ma1,
+
+            ]);
+        }
     }
 
     function Get_data()
