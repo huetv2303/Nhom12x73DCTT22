@@ -10,7 +10,8 @@ class DanhsachPhong_c extends controller
     function error()
     {
         $this->view('Masterlayout', [
-            'page' => 'error_v',
+            'ma' => $this->ds->toa_All(),
+            'ma1' => $this->ds->toa_All()
         ]);
         $update = $this->ds->update_ctphong();
         $dulieu = $this->ds->all();
