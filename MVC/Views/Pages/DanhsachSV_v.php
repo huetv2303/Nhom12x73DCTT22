@@ -65,7 +65,7 @@
                 <table id="tableThem" style="width: 100%">
                     <tr>
                         <td style="float: left;">
-                            <h2>Quản lý thông tin sinh viên</h2>
+                            <h2>Quản lý sinh viên</h2>  
                         </td>
                         <td style="float: right;  margin: 10px">
                             <button type="submit" class="btn btn-success" name=""><a href="http://localhost/Nhom12x73DCTT22/SinhVien" style="text-decoration: none; color:white">Thêm mới</a></button>
