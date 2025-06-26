@@ -115,8 +115,7 @@
         <br>
         <br>
         <a class="link" href="javascript:history.go(-1);" >↩ Trở về</a>
-
-    </form>
-    đâsdasdsdasdsdsdsasdasdasdsdsadasddasdasdsdasd
+      </form>
+      
 </body>
 </html>
